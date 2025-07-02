@@ -138,8 +138,9 @@ class Section(BaseModel):
     ) -> str | None:
         if func is None:
             return None
-        t_values = np.linspace(0, 1, 11)
-        return ",".join([str(round(width, 3)) for width in func(t_values)])
+        # Use numpy for rounding and formatting (vectorized, faster, lower mem)
+        widths = np.round(func(_T_VALUES), 3)
+        return ",".join(map(str, widths))
 
     @field_serializer("offset_function")
     def serialize_offset_function(
@@ -2857,3 +2858,5 @@ if __name__ == "__main__":
     xs2 = xs1.copy(width=10)
     assert xs2.name == xs1.name, f"{xs2.name} != {xs1.name}"
     print(xs2.name)
+
+_T_VALUES = np.linspace(0, 1, 11)
