@@ -61,15 +61,17 @@ def parse_component_name(name: str) -> tuple[str, bool]:
 
 
 def _flip_ref(c_ref: ComponentReference, port_name: str) -> ComponentReference:
-    if port_name not in c_ref.ports:
+    try:
+        port = c_ref.ports[port_name]
+    except KeyError:
         port_names = [port.name for port in c_ref.ports]
         raise ValueError(f"{port_name=} not in {c_ref.cell.name!r} {port_names}")
-    a = c_ref.ports[port_name].orientation
+    a = port.orientation
     if a in [0, 180]:
-        y = c_ref.ports[port_name].center[1]
+        y = port.center[1]
         c_ref.dmirror_y(y)
     else:
-        x = c_ref.ports[port_name].center[0]
+        x = port.center[0]
         c_ref.dmirror_x(x)
     return c_ref
 
