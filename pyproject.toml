@@ -287,3 +287,11 @@ showcontent = true
 
 [tool.ty.src]
 exclude = ["gdsfactory/samples"]
+
+[tool.uv.sources]
+codeflash = { path = "../codeflash", editable = true }
+
+[dependency-groups]
+dev = [
+    "codeflash",
+]
